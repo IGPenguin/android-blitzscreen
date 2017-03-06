@@ -1,5 +1,3 @@
-package com.intergalacticpenguin;
-
 import java.io.*;
 
 public class Main {
