@@ -1,12 +1,11 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
-class Android {
+final class AndroidCommand {
 
-    private static String getAndroidHome() {
+    public static String getAndroidHome() {
         String path;
         if (System.getenv("ANDROID_HOME") != null) {
             path = System.getenv("ANDROID_HOME");
@@ -18,7 +17,7 @@ class Android {
 
     public static void executeAdb(int deviceIndex, String command) {
         try {
-            String deviceId = getAdbDevices().get(deviceIndex);
+            String deviceId = DeviceManager.getAdbDeviceList().get(deviceIndex);
             String shellCommand = getAndroidHome() + "/platform-tools/adb -s " + deviceId + " " + command;
             Process process = Runtime.getRuntime().exec(shellCommand);
             process.waitFor();
@@ -49,28 +48,18 @@ class Android {
         }
     }
 
-    public static List<String> getAdbDevices() {
-        List<String> deviceList = new ArrayList<String>();
-        try {
-            Process process = Runtime.getRuntime().exec(getAndroidHome() + "/platform-tools/adb" + " devices");
-            String line;
-
-            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            while ((line = input.readLine()) != null) {
-                if (line.endsWith("device")) {
-                    deviceList.add(line.split("\\t")[0]);
-                }
-            }
-        } catch (IOException ex) {
-            System.out.println("Getting connected devices failed");
-            ex.printStackTrace();
-        }
-        return deviceList;
-    }
-
     public static void takeScreenshot(int deviceIndex, String fileName) {
+        String screenshotStoragePath = System.getenv("HOME") + "/Desktop/" + fileName + ".png";
+
+        System.out.println("Saving screenshot from \"" + DeviceManager.getAdbDeviceList().get(deviceIndex) + "\" to " + screenshotStoragePath);
         executeAdb(deviceIndex, " shell screencap -p /mnt/sdcard/screenshot.png");
-        executeAdb(deviceIndex, " pull /mnt/sdcard/screenshot.png " + System.getenv("HOME") + "/Desktop/" + fileName + ".png");
+        executeAdb(deviceIndex, " pull /mnt/sdcard/screenshot.png " + screenshotStoragePath);
         executeAdb(deviceIndex, " shell rm /mnt/sdcard/screenshot.png");
     }
+
+    public static void takeScreenshot(int deviceIndex) {
+        String fileName = Calendar.getInstance().getTime().toString().replaceAll("\\s", "-").replaceAll(":", "-");
+        takeScreenshot(deviceIndex, fileName);
+    }
+
 }
