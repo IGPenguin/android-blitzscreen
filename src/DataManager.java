@@ -4,23 +4,23 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceManager {
-    private static DeviceManager deviceManager = null;
-    private List<String> deviceList;
+public class DataManager {
+    private static DataManager dataManager = null;
+    private List<String> adbDevicesList;
 
-    private DeviceManager() {
+    private DataManager() {
     }
 
-    private static DeviceManager getInstance() {
-        if (deviceManager == null) {
-            deviceManager = new DeviceManager();
+    private static DataManager getInstance() {
+        if (dataManager == null) {
+            dataManager = new DataManager();
             updateAdbDeviceList();
         }
-        return deviceManager;
+        return dataManager;
     }
 
     public static List<String> getAdbDeviceList() {
-        return getInstance().deviceList;
+        return getInstance().adbDevicesList;
     }
 
     public static void updateAdbDeviceList() {
@@ -40,7 +40,7 @@ public class DeviceManager {
             ex.printStackTrace();
         }
         if (!deviceList.isEmpty()) {
-            getInstance().deviceList = deviceList;
+            getInstance().adbDevicesList = deviceList;
         } else {
             throw new RuntimeException("No devices detected");
         }

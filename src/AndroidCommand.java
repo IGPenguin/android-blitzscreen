@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 
 final class AndroidCommand {
@@ -17,7 +15,7 @@ final class AndroidCommand {
 
     public static void executeAdb(int deviceIndex, String command) {
         try {
-            String deviceId = DeviceManager.getAdbDeviceList().get(deviceIndex);
+            String deviceId = DataManager.getAdbDeviceList().get(deviceIndex);
             String shellCommand = getAndroidHome() + "/platform-tools/adb -s " + deviceId + " " + command;
             Process process = Runtime.getRuntime().exec(shellCommand);
             process.waitFor();
@@ -51,7 +49,7 @@ final class AndroidCommand {
     public static void takeScreenshot(int deviceIndex, String fileName) {
         String screenshotStoragePath = System.getenv("HOME") + "/Desktop/" + fileName + ".png";
 
-        System.out.println("Saving screenshot from \"" + DeviceManager.getAdbDeviceList().get(deviceIndex) + "\" to " + screenshotStoragePath);
+        System.out.println("Saving screenshot from \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\" to " + screenshotStoragePath);
         executeAdb(deviceIndex, " shell screencap -p /mnt/sdcard/screenshot.png");
         executeAdb(deviceIndex, " pull /mnt/sdcard/screenshot.png " + screenshotStoragePath);
         executeAdb(deviceIndex, " shell rm /mnt/sdcard/screenshot.png");
