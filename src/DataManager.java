@@ -19,6 +19,10 @@ public class DataManager {
         return dataManager;
     }
 
+    public static String getOutputPath(String fileName) {
+        return System.getenv("HOME") + "/Desktop/" + fileName + ".png";
+    }
+
     public static List<String> getAdbDeviceList() {
         return getInstance().adbDevicesList;
     }
@@ -39,10 +43,6 @@ public class DataManager {
             System.out.println("Getting connected devices failed");
             ex.printStackTrace();
         }
-        if (!deviceList.isEmpty()) {
-            getInstance().adbDevicesList = deviceList;
-        } else {
-            throw new RuntimeException("No devices detected");
-        }
+        getInstance().adbDevicesList = deviceList;
     }
 }

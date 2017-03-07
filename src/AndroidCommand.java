@@ -47,17 +47,19 @@ final class AndroidCommand {
     }
 
     public static void takeScreenshot(int deviceIndex, String fileName) {
-        String screenshotStoragePath = System.getenv("HOME") + "/Desktop/" + fileName + ".png";
-
-        System.out.println("Saving screenshot from \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\" to " + screenshotStoragePath);
+        System.out.println("Saving screenshot from \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\" to " + DataManager.getOutputPath(fileName));
         executeAdb(deviceIndex, " shell screencap -p /mnt/sdcard/screenshot.png");
-        executeAdb(deviceIndex, " pull /mnt/sdcard/screenshot.png " + screenshotStoragePath);
+        executeAdb(deviceIndex, " pull /mnt/sdcard/screenshot.png " + DataManager.getOutputPath(fileName));
         executeAdb(deviceIndex, " shell rm /mnt/sdcard/screenshot.png");
     }
 
     public static void takeScreenshot(int deviceIndex) {
         String fileName = Calendar.getInstance().getTime().toString().replaceAll("\\s", "-").replaceAll(":", "-");
         takeScreenshot(deviceIndex, fileName);
+    }
+
+    public static void recordScreen(int deviceIndex) {
+
     }
 
 }

@@ -8,7 +8,7 @@ public class Main {
     private static final String VERSION = "0.1";
 
     public static void main(String[] args) {
-        System.out.println("Easy device screen capture " + VERSION + "\n"
+        System.out.println("Easy device screen capture " + VERSION + "\n\n"
                 + "Shift + Alt + P - take screenshot of all connected Android devices");
 
         initializeGlobalKeyListener();

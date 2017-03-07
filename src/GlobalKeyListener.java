@@ -1,8 +1,6 @@
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-import javax.xml.crypto.Data;
-
 public class GlobalKeyListener implements NativeKeyListener {
 
     private boolean shiftPressed = false;
@@ -34,11 +32,15 @@ public class GlobalKeyListener implements NativeKeyListener {
             altPressed = false;
         }
         if (shiftPressed && altPressed) {
-            DataManager.updateAdbDeviceList();
             switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
                 case "P":
-                    for (int i = 0; i < DataManager.getAdbDeviceList().size(); i++) {
-                        AndroidCommand.takeScreenshot(i);
+                    DataManager.updateAdbDeviceList();
+                    if (DataManager.getAdbDeviceList().size() > 0) {
+                        for (int i = 0; i < DataManager.getAdbDeviceList().size(); i++) {
+                            AndroidCommand.takeScreenshot(i);
+                        }
+                    } else {
+                        System.out.println("Cannot take screenshot, no Android device detected");
                     }
                     break;
             }
