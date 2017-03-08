@@ -59,6 +59,7 @@ public class GlobalKeyListener implements NativeKeyListener {
                     } else {
                         System.out.println("Cannot start recording, no Android device detected");
                     }
+                    break;
             }
         }
     }

@@ -7,6 +7,7 @@ import java.util.List;
 public class DataManager {
     private static DataManager dataManager = null;
     private List<String> adbDevicesList;
+    private boolean mac = false;
 
     private DataManager() {
     }
@@ -15,6 +16,10 @@ public class DataManager {
         if (dataManager == null) {
             dataManager = new DataManager();
             updateAdbDeviceList();
+            if (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x")) {
+                getInstance().mac = true;
+            }
+
         }
         return dataManager;
     }
@@ -44,5 +49,9 @@ public class DataManager {
             ex.printStackTrace();
         }
         getInstance().adbDevicesList = deviceList;
+    }
+
+    public static boolean isThisMac() {
+        return getInstance().mac;
     }
 }

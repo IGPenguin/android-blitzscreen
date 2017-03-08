@@ -22,36 +22,30 @@ final class AndroidCommand {
             String shellCommand = getAndroidHome() + "/platform-tools/adb -s " + deviceId + " " + command;
             Process process = Runtime.getRuntime().exec(shellCommand);
             if (waitForFinish) {
-                //process.waitFor();
-
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-                // read the output from the command
                 String s;
                 while ((s = stdInput.readLine()) != null) {
                     output.append(s);
                 }
-
-                // read any errors from the attempted command
                 while ((s = stdError.readLine()) != null) {
                     output.append(s);
                 }
-
             }
         } catch (IOException ex) {
             System.out.println("Executing adb command failed");
             ex.printStackTrace();
-//        } catch (InterruptedException ex) {
-//            System.out.println("Waiting for adb execution interrupted");
-//            ex.printStackTrace();
         }
+
         return output.toString();
     }
 
     static void takeScreenshot(int deviceIndex, String fileName) {
-        System.out.println("Saving screenshot from \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\" to " + DataManager.getOutputPath(fileName) + ".png");
+        String deviceName = DataManager.getAdbDeviceList().get(deviceIndex);
+        String outputPath = DataManager.getOutputPath(fileName) + ".png";
+
+        System.out.println("Saving screenshot from \"" + deviceName + "\" to " + outputPath);
+        GraphicOutput.showMacNotification("Saving screenshot from " + deviceName, "to " + outputPath);
         executeAdb(deviceIndex, "shell screencap -p /mnt/sdcard/screenshot.png", true);
         executeAdb(deviceIndex, "pull /mnt/sdcard/screenshot.png " + DataManager.getOutputPath(fileName) + ".png", true);
         executeAdb(deviceIndex, "shell rm /mnt/sdcard/screenshot.png", true);
@@ -63,19 +57,28 @@ final class AndroidCommand {
     }
 
     static void startRecordingScreen(int deviceIndex) {
-        System.out.println("Starting recording on \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\"");
+        String deviceName = DataManager.getAdbDeviceList().get(deviceIndex);
+
+        System.out.println("Started recording screen on \"" + deviceName + "\"");
+        GraphicOutput.showMacNotification("Started recording screen on " + deviceName);
         executeAdb(deviceIndex, "shell screenrecord --verbose /mnt/sdcard/recording.mp4", false);
     }
 
     static void stopRecordingScreen(int deviceIndex, String fileName) {
-        System.out.println("Stopping recording on \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\"");
+        String deviceName = DataManager.getAdbDeviceList().get(deviceIndex);
+        String outputPath = DataManager.getOutputPath(fileName) + ".mp4";
+
+        System.out.println("Stopping recording on \"" + deviceName + "\"");
+        GraphicOutput.showMacNotification("Stopping recording on " + deviceName);
         executeAdb(deviceIndex, "shell pkill -SIGINT screenrecord", true);
         while (!executeAdb(deviceIndex, "shell top -n 1|grep screenrecord", true).isEmpty()) {
         }
-        System.out.println("Copying recording from \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\" to " + DataManager.getOutputPath(fileName) + ".mp4");
-        executeAdb(deviceIndex, "pull /mnt/sdcard/recording.mp4 " + DataManager.getOutputPath(fileName) + ".mp4", true);
+        System.out.println("Saving recording from \"" + deviceName + "\" to " + outputPath);
+        executeAdb(deviceIndex, "pull /mnt/sdcard/recording.mp4 " + outputPath, true);
         executeAdb(deviceIndex, "shell rm /mnt/sdcard/recording.mp4", true);
-        System.out.println("Copying recording from \"" + DataManager.getAdbDeviceList().get(deviceIndex) + "\" finished");
+        System.out.println("Saved recording from \"" + deviceName + "\"");
+        GraphicOutput.showMacNotification("Saved recording from " + deviceName, "to " + outputPath);
+
     }
 
     static void stopRecordingScreen(int deviceIndex) {
