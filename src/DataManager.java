@@ -7,6 +7,7 @@ import java.util.List;
 public class DataManager {
     private static DataManager dataManager = null;
     private List<String> adbDevicesList;
+    private int defaultAdbDevice;
     private boolean mac = false;
 
     private DataManager() {
@@ -16,6 +17,7 @@ public class DataManager {
         if (dataManager == null) {
             dataManager = new DataManager();
             updateAdbDeviceList();
+            getInstance().defaultAdbDevice = -1;
             if (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x")) {
                 getInstance().mac = true;
             }
@@ -24,15 +26,15 @@ public class DataManager {
         return dataManager;
     }
 
-    public static String getOutputPath(String fileName) {
+    static String getOutputPath(String fileName) {
         return System.getenv("HOME") + "/Desktop/" + fileName;
     }
 
-    public static List<String> getAdbDeviceList() {
+    static List<String> getAdbDeviceList() {
         return getInstance().adbDevicesList;
     }
 
-    public static void updateAdbDeviceList() {
+    static void updateAdbDeviceList() {
         List<String> deviceList = new ArrayList<String>();
         try {
             Process process = Runtime.getRuntime().exec(AndroidCommand.getAndroidHome() + "/platform-tools/adb" + " devices");
@@ -45,13 +47,31 @@ public class DataManager {
                 }
             }
         } catch (IOException ex) {
-            System.out.println("Getting connected devices failed");
+            System.out.println("Getting adb devices failed");
             ex.printStackTrace();
         }
         getInstance().adbDevicesList = deviceList;
+
+        if (deviceList.isEmpty()) {
+            setDefaultAdbDevice(-1);
+            GraphicOutput.showMacNotification("No adb device connected, default device unset");
+        } else {
+            if (getDefaultAdbDevice() == (-1)) {
+                setDefaultAdbDevice(0);
+            }
+        }
     }
 
-    public static boolean isThisMac() {
+    static boolean isThisMac() {
         return getInstance().mac;
     }
+
+    static void setDefaultAdbDevice(int deviceIndex) {
+        getInstance().defaultAdbDevice = deviceIndex;
+    }
+
+    static int getDefaultAdbDevice() {
+        return getInstance().defaultAdbDevice;
+    }
+
 }

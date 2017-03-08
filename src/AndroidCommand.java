@@ -40,6 +40,19 @@ final class AndroidCommand {
         return output.toString();
     }
 
+    static void cycleDefaultAdbDevice() {
+        DataManager.updateAdbDeviceList();
+        if (DataManager.getDefaultAdbDevice() != (-1)) {
+            int deviceCount = DataManager.getAdbDeviceList().size();
+            if (DataManager.getDefaultAdbDevice() < (deviceCount - 1)) {
+                DataManager.setDefaultAdbDevice(DataManager.getDefaultAdbDevice() + 1);
+            } else {
+                DataManager.setDefaultAdbDevice(0);
+            }
+            GraphicOutput.showMacNotification("Adb device " + DataManager.getAdbDeviceList().get(DataManager.getDefaultAdbDevice()) + " set as default");
+        }
+    }
+
     static void takeScreenshot(int deviceIndex, String fileName) {
         String deviceName = DataManager.getAdbDeviceList().get(deviceIndex);
         String outputPath = DataManager.getOutputPath(fileName) + ".png";

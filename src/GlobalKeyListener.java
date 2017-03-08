@@ -35,7 +35,7 @@ public class GlobalKeyListener implements NativeKeyListener {
         if (shiftPressed && altPressed) {
             switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
 
-                case "P":
+                case "A":
                     DataManager.updateAdbDeviceList();
                     if (DataManager.getAdbDeviceList().size() > 0) {
                         for (int i = 0; i < DataManager.getAdbDeviceList().size(); i++) {
@@ -43,23 +43,40 @@ public class GlobalKeyListener implements NativeKeyListener {
                         }
                     } else {
                         System.out.println("Cannot take screenshot, no Android device detected");
+                        GraphicOutput.showMacNotification("Cannot take screenshot, no Android device detected");
+                    }
+                    break;
+
+                case "P":
+                    DataManager.updateAdbDeviceList();
+                    if (DataManager.getDefaultAdbDevice() != (-1)) {
+                        AndroidCommand.takeScreenshot(DataManager.getDefaultAdbDevice());
+                    } else {
+                        System.out.println("Cannot take screenshot, no Android device detected");
+                        GraphicOutput.showMacNotification("Cannot take screenshot, no Android device detected");
                     }
                     break;
 
                 case "R":
                     DataManager.updateAdbDeviceList();
-                    if (DataManager.getAdbDeviceList().size() > 0) {
+                    if (DataManager.getDefaultAdbDevice() != (-1)) {
                         if (!recordingInProgress) {
-                            AndroidCommand.startRecordingScreen(0);
+                            AndroidCommand.startRecordingScreen(DataManager.getDefaultAdbDevice());
                             recordingInProgress = true;
                         } else {
-                            AndroidCommand.stopRecordingScreen(0);
+                            AndroidCommand.stopRecordingScreen(DataManager.getDefaultAdbDevice());
                             recordingInProgress = false;
                         }
                     } else {
                         System.out.println("Cannot start recording, no Android device detected");
+                        GraphicOutput.showMacNotification("Cannot start recording, no Android device detected");
                     }
                     break;
+
+                case "D":
+                    AndroidCommand.cycleDefaultAdbDevice();
+                    break;
+
             }
         }
     }
