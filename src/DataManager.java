@@ -20,7 +20,7 @@ public class DataManager {
     }
 
     public static String getOutputPath(String fileName) {
-        return System.getenv("HOME") + "/Desktop/" + fileName + ".png";
+        return System.getenv("HOME") + "/Desktop/" + fileName;
     }
 
     public static List<String> getAdbDeviceList() {
