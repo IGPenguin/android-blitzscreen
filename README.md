@@ -13,7 +13,7 @@ This tool is for capturing screenshots and recording videos from Android devices
 3. You may be prompted by system to change your accessibility settings, you must have enabled terminal in system accessibility settings to use this tool - so it can listen for hotkeys from anywhere
 
 ##Hotkeys
-Shift + Alt + A - take screenshot of all connected devices
-Shift + Alt + P - take screenshot of default device
-Shift + Alt + R - start/stop recording on default device
-Shift + Alt + D - change default device
+*Shift + Alt + A - take screenshot of all connected devices
+*Shift + Alt + P - take screenshot of default device
+*Shift + Alt + R - start/stop recording on default device
+*Shift + Alt + D - change default device
