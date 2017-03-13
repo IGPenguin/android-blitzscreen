@@ -15,7 +15,7 @@ class AndroidCommand {
         }
 
         File adbFile = new File(path + "adb");
-        if (!adbFile.exists() || adbFile.isDirectory()) {
+        if (!adbFile.isFile()) {
             throw new RuntimeException("Adb not found in \"" + path + "\"");
         }
 
