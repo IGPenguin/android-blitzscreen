@@ -42,8 +42,8 @@ public class GlobalKeyListener implements NativeKeyListener {
                             AndroidCommand.takeScreenshot(i);
                         }
                     } else {
-                        System.out.println("Cannot take screenshot, no Android device detected");
-                        GraphicOutput.showMacNotification("Cannot take screenshot, no Android device detected");
+                        System.out.println("Cannot take screenshot, no device detected");
+                        GraphicOutput.showMacNotification("Cannot take screenshot, no device detected");
                     }
                     break;
 
@@ -52,8 +52,8 @@ public class GlobalKeyListener implements NativeKeyListener {
                     if (DataManager.getDefaultAdbDevice() != (-1)) {
                         AndroidCommand.takeScreenshot(DataManager.getDefaultAdbDevice());
                     } else {
-                        System.out.println("Cannot take screenshot, no Android device detected");
-                        GraphicOutput.showMacNotification("Cannot take screenshot, no Android device detected");
+                        System.out.println("Cannot take screenshot, no device detected");
+                        GraphicOutput.showMacNotification("Cannot take screenshot, no device detected");
                     }
                     break;
 
@@ -68,8 +68,8 @@ public class GlobalKeyListener implements NativeKeyListener {
                             recordingInProgress = false;
                         }
                     } else {
-                        System.out.println("Cannot start recording, no Android device detected");
-                        GraphicOutput.showMacNotification("Cannot start recording, no Android device detected");
+                        System.out.println("Cannot start recording, no device detected");
+                        GraphicOutput.showMacNotification("Cannot start recording, no device detected");
                     }
                     break;
 

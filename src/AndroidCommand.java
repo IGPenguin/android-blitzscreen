@@ -65,6 +65,7 @@ class AndroidCommand {
             } else {
                 DataManager.setDefaultAdbDevice(0);
             }
+            System.out.println("Device " + DataManager.getAdbDeviceList().get(DataManager.getDefaultAdbDevice()) + " set as default");
             GraphicOutput.showMacNotification("Device " + DataManager.getAdbDeviceList().get(DataManager.getDefaultAdbDevice()) + " set as default");
         }
     }

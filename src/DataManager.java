@@ -54,7 +54,8 @@ class DataManager {
 
         if (deviceList.isEmpty()) {
             setDefaultAdbDevice(-1);
-            GraphicOutput.showMacNotification("No adb device connected, default device unset");
+            System.out.println("No device connected, default device unset");
+            GraphicOutput.showMacNotification("No device connected, default device unset");
         } else {
             if (getDefaultAdbDevice() == (-1)) {
                 setDefaultAdbDevice(0);
