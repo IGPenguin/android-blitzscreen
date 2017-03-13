@@ -37,7 +37,7 @@ class DataManager {
     static void updateAdbDeviceList() {
         List<String> deviceList = new ArrayList<String>();
         try {
-            Process process = Runtime.getRuntime().exec(AndroidCommand.getAndroidHome() + "/platform-tools/adb" + " devices");
+            Process process = Runtime.getRuntime().exec(AndroidCommand.getAdbPath() + "adb" + " devices");
             String line;
 
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));

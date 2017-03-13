@@ -1,17 +1,24 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
 class AndroidCommand {
 
-    static String getAndroidHome() {
+    static String getAdbPath() {
         String path;
         if (System.getenv("ANDROID_HOME") != null) {
-            path = System.getenv("ANDROID_HOME");
+            path = System.getenv("ANDROID_HOME") + "platform-tools/";
         } else {
-            throw new RuntimeException("Enviroment variable \"ANDROID_HOME\" not set, adb not found");
+            throw new RuntimeException("Environment variable \"ANDROID_HOME\" not set, adb not found");
         }
+
+        File adbFile = new File(path + "adb");
+        if (!adbFile.exists() || adbFile.isDirectory()) {
+            throw new RuntimeException("Adb not found in \"" + path + "\"");
+        }
+
         return path;
     }
 
@@ -19,7 +26,7 @@ class AndroidCommand {
         StringBuilder output = new StringBuilder();
         try {
             String deviceId = DataManager.getAdbDeviceList().get(deviceIndex);
-            String shellCommand = getAndroidHome() + "/platform-tools/adb -s " + deviceId + " " + command;
+            String shellCommand = getAdbPath() + "adb -s " + deviceId + " " + command;
             Process process = Runtime.getRuntime().exec(shellCommand);
             if (waitForFinish) {
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
