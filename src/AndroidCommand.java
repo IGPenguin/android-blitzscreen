@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
-final class AndroidCommand {
+class AndroidCommand {
 
     static String getAndroidHome() {
         String path;
@@ -40,6 +40,15 @@ final class AndroidCommand {
         return output.toString();
     }
 
+    static boolean recordingAvailable(int deviceIndex) {
+        if (executeAdb(deviceIndex, "shell ls system/bin/screenrecord", true).equals("system/bin/screenrecord")) {
+            return true;
+        } else {
+            GraphicOutput.showMacNotification("Device " + DataManager.getAdbDeviceList().get(DataManager.getDefaultAdbDevice()) + " does not support recording");
+            return false;
+        }
+    }
+
     static void cycleDefaultAdbDevice() {
         DataManager.updateAdbDeviceList();
         if (DataManager.getDefaultAdbDevice() != (-1)) {
@@ -49,7 +58,7 @@ final class AndroidCommand {
             } else {
                 DataManager.setDefaultAdbDevice(0);
             }
-            GraphicOutput.showMacNotification("Adb device " + DataManager.getAdbDeviceList().get(DataManager.getDefaultAdbDevice()) + " set as default");
+            GraphicOutput.showMacNotification("Device " + DataManager.getAdbDeviceList().get(DataManager.getDefaultAdbDevice()) + " set as default");
         }
     }
 

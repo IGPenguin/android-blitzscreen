@@ -8,7 +8,7 @@ public class Main {
     private static final String VERSION = "0.1";
 
     public static void main(String[] args) {
-        System.out.println("Easy device screen capture " + VERSION + "\n\n" +
+        System.out.println("Easy Android screen capture " + VERSION + "\n\n" +
                 "Shift + Alt + A - take screenshot of all connected devices\n" +
                 "Shift + Alt + P - take screenshot of default device\n" +
                 "Shift + Alt + R - start/stop recording on default device\n" +
@@ -18,7 +18,8 @@ public class Main {
         GraphicOutput.showMacNotification("Ready to use");
     }
 
-    public static void initializeGlobalKeyListener() {
+
+    private static void initializeGlobalKeyListener() {
         // Disable logging for key listening
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.OFF);

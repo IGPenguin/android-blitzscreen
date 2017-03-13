@@ -60,10 +60,10 @@ public class GlobalKeyListener implements NativeKeyListener {
                 case "R":
                     DataManager.updateAdbDeviceList();
                     if (DataManager.getDefaultAdbDevice() != (-1)) {
-                        if (!recordingInProgress) {
+                        if (!recordingInProgress && AndroidCommand.recordingAvailable(DataManager.getDefaultAdbDevice())) {
                             AndroidCommand.startRecordingScreen(DataManager.getDefaultAdbDevice());
                             recordingInProgress = true;
-                        } else {
+                        } else if (recordingInProgress) {
                             AndroidCommand.stopRecordingScreen(DataManager.getDefaultAdbDevice());
                             recordingInProgress = false;
                         }

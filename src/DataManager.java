@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataManager {
+class DataManager {
     private static DataManager dataManager = null;
     private List<String> adbDevicesList;
     private int defaultAdbDevice;
