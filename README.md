@@ -4,7 +4,8 @@
 This tool is for capturing screenshots and recording videos from Android devices using ADB straight to your desktop. Capturing is triggered by hotkeys listed below, which are implemented with [jnativehook](https://github.com/kwhat/jnativehook) library.
 
 ##Requirements
-1. Linux or macOS with Java and Android Debug Bridge installed (on macOS, you are getting notifications about triggered actions)
+1. Linux or macOS with Java and Android Debug Bridge installed
+* On macOS, you are getting notifications about triggered actions
 2. Enviroment variable ANDROID_HOME set properly (it should point to your Android SDK directory)
 
 ##How to run
