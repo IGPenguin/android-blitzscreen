@@ -5,7 +5,7 @@ This tool is for capturing screenshots and recording videos from Android devices
 
 ##Requirements
 1. Linux or macOS with Java and Android Debug Bridge installed
-    - On macOS, you are getting notifications about triggered actions
+    - On macOS, you are getting notifications about triggered actions ![notification](https://github.com/eidamsvoboda/android-blitzscreen/raw/master/images/notification.png)
 2. Environment variable ANDROID_HOME set properly (it should point to your Android SDK directory)
 
 ##How to run
