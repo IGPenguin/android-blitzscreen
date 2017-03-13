@@ -8,7 +8,7 @@ public class Main {
     private static final String VERSION = "1.0";
 
     public static void main(String[] args) {
-        System.out.println("Easy Android screen capture " + VERSION + "\n\n" +
+        System.out.println("Android Blitzscreen " + VERSION + "\n\n" +
                 "Shift + Alt + A - take screenshot of all connected devices\n" +
                 "Shift + Alt + P - take screenshot of default device\n" +
                 "Shift + Alt + R - start/stop recording on default device\n" +
