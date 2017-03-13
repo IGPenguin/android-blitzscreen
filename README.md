@@ -1,5 +1,5 @@
 # Android Blitzscreen
-<img src="https://github.com/eidamsvoboda/android-blitzscreen/raw/master/images/notification.png" width="200" height="200" />
+<img src="https://github.com/eidamsvoboda/android-blitzscreen/raw/master/images/notification.png"/>
 
 ##What it does
 This tool is for capturing screenshots and recording videos from Android devices using ADB straight to your desktop. Capturing is triggered by hotkeys listed below, which are implemented with [jnativehook](https://github.com/kwhat/jnativehook) library.
