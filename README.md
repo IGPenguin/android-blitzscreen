@@ -5,11 +5,11 @@ This tool is for capturing screenshots and recording videos from Android devices
 
 ##Requirements
 1. Linux or macOS with Java and Android Debug Bridge installed
-* On macOS, you are getting notifications about triggered actions
-2. Enviroment variable ANDROID_HOME set properly (it should point to your Android SDK directory)
+    - On macOS, you are getting notifications about triggered actions
+2. Environment variable ANDROID_HOME set properly (it should point to your Android SDK directory)
 
 ##How to run
-1. Download android-blitzscreen.jar from build folder
+1. Download **android-blitzscreen.jar** from build folder
 2. Using terminal navigate to directory where you saved it and launch `java -jar android-blitzscreen.jar`
 3. You may be prompted by system to change your accessibility settings, you must have enabled terminal in system accessibility settings to use this tool - so it can listen for hotkeys from anywhere
 
