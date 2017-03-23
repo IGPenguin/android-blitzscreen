@@ -5,7 +5,7 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private boolean shiftPressed = false;
     private boolean altPressed = false;
-    private boolean recordingInProgress = false;
+    protected boolean recordingInProgress = false;
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
