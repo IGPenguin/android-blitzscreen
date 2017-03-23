@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Calendar;
 
 class AndroidCommand {
@@ -13,7 +10,6 @@ class AndroidCommand {
         } else {
             throw new RuntimeException("Environment variable \"ANDROID_HOME\" not set, adb not found");
         }
-
         File adbFile = new File(path + "adb");
         if (!adbFile.isFile()) {
             throw new RuntimeException("Adb not found in \"" + path + "\"");
@@ -97,10 +93,14 @@ class AndroidCommand {
     static void stopRecordingScreen(int deviceIndex, String fileName) {
         String deviceName = DataManager.getAdbDeviceList().get(deviceIndex);
         String outputPath = DataManager.getOutputPath(fileName) + ".mp4";
+        String pidString;
 
         System.out.println("Stopping recording on \"" + deviceName + "\"");
         GraphicOutput.showMacNotification("Stopping recording on " + deviceName);
-        executeAdb(deviceIndex, "shell pkill -SIGINT screenrecord", true);
+        pidString = executeAdb(deviceIndex, "shell top -d 0 -n 1 | grep screenrecord ", true);
+        pidString = pidString.replaceFirst(" ", "");
+        pidString = pidString.substring(0, pidString.indexOf(" "));
+        executeAdb(deviceIndex, "shell kill -SIGINT " + pidString, true);
         while (!executeAdb(deviceIndex, "shell top -n 1|grep screenrecord", true).isEmpty()) {
         }
         System.out.println("Saving recording from \"" + deviceName + "\" to " + outputPath);
@@ -108,7 +108,6 @@ class AndroidCommand {
         executeAdb(deviceIndex, "shell rm /mnt/sdcard/recording.mp4", true);
         System.out.println("Saved recording from \"" + deviceName + "\"");
         GraphicOutput.showMacNotification("Saved recording from " + deviceName, "to " + outputPath);
-
     }
 
     static void stopRecordingScreen(int deviceIndex) {
