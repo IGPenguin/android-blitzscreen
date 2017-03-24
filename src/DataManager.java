@@ -12,6 +12,9 @@ class DataManager {
     private int defaultAdbDeviceIndex;
     private boolean mac = false;
 
+    private DataManager() {
+    }
+
     private static DataManager getInstance() {
         if (dataManager == null) {
             dataManager = new DataManager();
