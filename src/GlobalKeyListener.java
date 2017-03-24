@@ -1,16 +1,16 @@
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
+import java.io.IOException;
+
 public class GlobalKeyListener implements NativeKeyListener {
 
     private boolean shiftPressed = false;
     private boolean altPressed = false;
-    protected boolean recordingInProgress = false;
+    boolean recordingInProgress = false;
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
-        //System.out.println("Pressed: " + NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode()));
-
         if (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode()).equalsIgnoreCase("shift")) {
             shiftPressed = true;
         }
@@ -23,8 +23,6 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) {
-        //System.out.println("Released: " + NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode()));
-
         if (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode()).equalsIgnoreCase("shift")) {
             shiftPressed = false;
         }
@@ -33,50 +31,55 @@ public class GlobalKeyListener implements NativeKeyListener {
             altPressed = false;
         }
         if (shiftPressed && altPressed) {
-            switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
+            try {
+                switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
 
-                case "A":
-                    DataManager.updateAdbDeviceList();
-                    if (DataManager.getAdbDeviceList().size() > 0) {
-                        for (int i = 0; i < DataManager.getAdbDeviceList().size(); i++) {
-                            AndroidCommand.takeScreenshot(i);
+                    case "A":
+                        DataManager.updateAdbDeviceList();
+                        if (DataManager.getAdbDeviceList().size() > 0) {
+                            for (int i = 0; i < DataManager.getAdbDeviceList().size(); i++) {
+                                AdbCommandDispatcher.takeScreenshot(i);
+                            }
+                        } else {
+                            Reporter.report("Cannot take screenshot, no device detected");
                         }
-                    } else {
-                        System.out.println("Cannot take screenshot, no device detected");
-                        GraphicOutput.showMacNotification("Cannot take screenshot, no device detected");
-                    }
-                    break;
+                        break;
 
-                case "P":
-                    DataManager.updateAdbDeviceList();
-                    if (DataManager.getDefaultAdbDevice() != (-1)) {
-                        AndroidCommand.takeScreenshot(DataManager.getDefaultAdbDevice());
-                    } else {
-                        System.out.println("Cannot take screenshot, no device detected");
-                        GraphicOutput.showMacNotification("Cannot take screenshot, no device detected");
-                    }
-                    break;
-
-                case "R":
-                    DataManager.updateAdbDeviceList();
-                    if (DataManager.getDefaultAdbDevice() != (-1)) {
-                        if (!recordingInProgress && AndroidCommand.recordingAvailable(DataManager.getDefaultAdbDevice())) {
-                            AndroidCommand.startRecordingScreen(DataManager.getDefaultAdbDevice());
-                            recordingInProgress = true;
-                        } else if (recordingInProgress) {
-                            AndroidCommand.stopRecordingScreen(DataManager.getDefaultAdbDevice());
-                            recordingInProgress = false;
+                    case "P":
+                        DataManager.updateAdbDeviceList();
+                        if (DataManager.getDefaultAdbDeviceIndex() != (-1)) {
+                            AdbCommandDispatcher.takeScreenshot(DataManager.getDefaultAdbDeviceIndex());
+                        } else {
+                            Reporter.report("Cannot take screenshot, no device detected");
                         }
-                    } else {
-                        System.out.println("Cannot start recording, no device detected");
-                        GraphicOutput.showMacNotification("Cannot start recording, no device detected");
-                    }
-                    break;
+                        break;
 
-                case "D":
-                    AndroidCommand.cycleDefaultAdbDevice();
-                    break;
+                    case "R":
+                        DataManager.updateAdbDeviceList();
+                        if (DataManager.getDefaultAdbDeviceIndex() != (-1)) {
+                            if (!recordingInProgress && AdbCommandDispatcher.recordingAvailable()) {
+                                AdbCommandDispatcher.startRecordingScreen(DataManager.getDefaultAdbDeviceIndex());
+                                recordingInProgress = true;
+                            } else if (recordingInProgress) {
+                                AdbCommandDispatcher.stopRecordingScreen(DataManager.getDefaultAdbDeviceIndex());
+                                recordingInProgress = false;
+                            }
+                        } else {
+                            Reporter.report("Cannot start recording, no device detected");
+                        }
+                        break;
 
+                    case "D":
+                        if (!recordingInProgress) {
+                            DataManager.cycleDefaultAdbDevice();
+                        } else {
+                            Reporter.report("Cannot change default device while recording");
+                        }
+                        break;
+
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

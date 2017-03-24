@@ -1,6 +1,7 @@
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,7 +10,6 @@ public class Main {
     private static GlobalKeyListener globalKeyListener;
 
     public static void main(String[] args) {
-        registerShutdownHook();
         System.out.println("Android Blitzscreen " + VERSION + "\n\n" +
                 "Shift + Alt + A - take screenshot of all connected devices\n" +
                 "Shift + Alt + P - take screenshot of default device\n" +
@@ -17,7 +17,8 @@ public class Main {
                 "Shift + Alt + D - change default device\n");
 
         initializeGlobalKeyListener();
-        GraphicOutput.showMacNotification("Ready to use");
+        registerShutdownHook();
+        Reporter.report("Ready to use");
     }
 
 
@@ -30,7 +31,7 @@ public class Main {
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
-            System.out.println("Native hook cant be registered, accessibility settings on your computer probably not set");
+            Reporter.report("Native hook cant be registered, accessibility settings on your computer probably not set");
             System.exit(1);
         }
 
@@ -42,10 +43,13 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 if (globalKeyListener.recordingInProgress) {
-                    AndroidCommand.stopRecordingScreen(DataManager.getDefaultAdbDevice());
+                    try {
+                        AdbCommandDispatcher.stopRecordingScreen(DataManager.getDefaultAdbDeviceIndex());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
     }
-
 }

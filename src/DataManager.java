@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -6,28 +7,44 @@ import java.util.List;
 
 class DataManager {
     private static DataManager dataManager = null;
+    private String adbLocation;
     private List<String> adbDevicesList;
-    private int defaultAdbDevice;
+    private int defaultAdbDeviceIndex;
     private boolean mac = false;
-
-    private DataManager() {
-    }
 
     private static DataManager getInstance() {
         if (dataManager == null) {
             dataManager = new DataManager();
+            loadAdb();
             updateAdbDeviceList();
-            getInstance().defaultAdbDevice = -1;
+            getInstance().defaultAdbDeviceIndex = -1;
             if (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x")) {
                 getInstance().mac = true;
             }
-
         }
         return dataManager;
     }
 
     static String getOutputPath(String fileName) {
         return System.getenv("HOME") + "/Desktop/" + fileName;
+    }
+
+    private static void loadAdb() {
+        String path;
+        if (System.getenv("ANDROID_HOME") != null) {
+            path = System.getenv("ANDROID_HOME") + "platform-tools/";
+        } else {
+            throw new RuntimeException("Environment variable \"ANDROID_HOME\" not set, adb not found");
+        }
+        File adbFile = new File(path + "adb");
+        if (!adbFile.isFile()) {
+            throw new RuntimeException("Adb not found in \"" + path + "\"");
+        }
+        getInstance().adbLocation = path;
+    }
+
+    static String getAdbLocation() {
+        return getInstance().adbLocation;
     }
 
     static List<String> getAdbDeviceList() {
@@ -37,7 +54,7 @@ class DataManager {
     static void updateAdbDeviceList() {
         List<String> deviceList = new ArrayList<String>();
         try {
-            Process process = Runtime.getRuntime().exec(AndroidCommand.getAdbPath() + "adb" + " devices");
+            Process process = Runtime.getRuntime().exec(getInstance().adbLocation + "adb" + " devices");
             String line;
 
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -47,32 +64,48 @@ class DataManager {
                 }
             }
         } catch (IOException ex) {
-            System.out.println("Getting adb devices failed");
+            Reporter.report("Getting adb devices failed");
             ex.printStackTrace();
         }
         getInstance().adbDevicesList = deviceList;
 
         if (deviceList.isEmpty()) {
-            setDefaultAdbDevice(-1);
-            System.out.println("No device connected, default device unset");
-            GraphicOutput.showMacNotification("No device connected, default device unset");
+            setDefaultAdbDeviceIndex(-1);
+            Reporter.report("No device connected, default device unset");
         } else {
-            if (getDefaultAdbDevice() == (-1)) {
-                setDefaultAdbDevice(0);
+            if (getDefaultAdbDeviceIndex() == (-1)) {
+                setDefaultAdbDeviceIndex(0);
             }
         }
     }
 
+    private static void setDefaultAdbDeviceIndex(int deviceIndex) {
+        getInstance().defaultAdbDeviceIndex = deviceIndex;
+    }
+
+    static void cycleDefaultAdbDevice() {
+        updateAdbDeviceList();
+        if (getDefaultAdbDeviceIndex() != (-1)) {
+            int deviceCount = getAdbDeviceList().size();
+            if (getDefaultAdbDeviceIndex() < (deviceCount - 1)) {
+                setDefaultAdbDeviceIndex(getDefaultAdbDeviceIndex() + 1);
+            } else {
+                setDefaultAdbDeviceIndex(0);
+            }
+            Reporter.report("Device " + getAdbDeviceList().get(getDefaultAdbDeviceIndex()) + " set as default");
+        }
+    }
+
+    static int getDefaultAdbDeviceIndex() {
+        return getInstance().defaultAdbDeviceIndex;
+    }
+
+    static String getAdbDeviceId(int deviceIndex) {
+        return getAdbDeviceList().get(deviceIndex);
+    }
+
     static boolean isThisMac() {
         return getInstance().mac;
-    }
-
-    static void setDefaultAdbDevice(int deviceIndex) {
-        getInstance().defaultAdbDevice = deviceIndex;
-    }
-
-    static int getDefaultAdbDevice() {
-        return getInstance().defaultAdbDevice;
     }
 
 }
