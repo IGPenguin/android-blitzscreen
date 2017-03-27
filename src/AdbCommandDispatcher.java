@@ -35,11 +35,9 @@ class AdbCommandDispatcher {
     }
 
     static void stopRecordingScreen(int deviceIndex, String fileName) throws IOException {String outputPath = DataManager.getOutputPath(fileName) + ".mp4";
-        String pidString;
-
         Reporter.report("Stopping recording on " + DataManager.getAdbDeviceId(deviceIndex));
 
-        pidString = new AdbCommand(deviceIndex, "shell top -d 0 -n 1 | grep screenrecord ").execute().getOutput();
+        String pidString = new AdbCommand(deviceIndex, "shell top -d 0 -n 1 | grep screenrecord ").execute().getOutput();
         pidString = pidString.replaceFirst(" ", "");
         pidString = pidString.substring(0, pidString.indexOf(" "));
 
