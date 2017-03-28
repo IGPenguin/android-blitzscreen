@@ -10,7 +10,8 @@ class DataManager {
     private String adbLocation;
     private List<String> adbDevicesList;
     private int defaultAdbDeviceIndex;
-    private boolean mac = false;
+    private boolean mac;
+    private boolean recordingInProgress;
 
     private DataManager() {
     }
@@ -21,6 +22,7 @@ class DataManager {
             loadAdb();
             updateAdbDeviceList();
             getInstance().defaultAdbDeviceIndex = -1;
+            getInstance().recordingInProgress = false;
             if (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x")) {
                 getInstance().mac = true;
             }
@@ -109,6 +111,14 @@ class DataManager {
 
     static boolean isThisMac() {
         return getInstance().mac;
+    }
+
+    static boolean isRecordingInProgress() {
+        return getInstance().recordingInProgress;
+    }
+
+    static void setRecordingState(boolean recording) {
+        getInstance().recordingInProgress = recording;
     }
 
 }

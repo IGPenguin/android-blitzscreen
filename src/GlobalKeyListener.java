@@ -7,7 +7,6 @@ public class GlobalKeyListener implements NativeKeyListener {
 
     private boolean shiftPressed = false;
     private boolean altPressed = false;
-    boolean recordingInProgress = false;
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
@@ -35,46 +34,19 @@ public class GlobalKeyListener implements NativeKeyListener {
                 switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
 
                     case "A":
-                        DataManager.updateAdbDeviceList();
-                        if (DataManager.getAdbDeviceList().size() > 0) {
-                            for (int i = 0; i < DataManager.getAdbDeviceList().size(); i++) {
-                                AdbCommandDispatcher.takeScreenshot(i);
-                            }
-                        } else {
-                            Reporter.report("Cannot take screenshot, no device detected");
-                        }
+                        AdbCommandDispatcher.takeScreenshotOfAllDevices();
                         break;
 
                     case "P":
-                        DataManager.updateAdbDeviceList();
-                        if (DataManager.getDefaultAdbDeviceIndex() != (-1)) {
-                            AdbCommandDispatcher.takeScreenshot(DataManager.getDefaultAdbDeviceIndex());
-                        } else {
-                            Reporter.report("Cannot take screenshot, no device detected");
-                        }
+                        AdbCommandDispatcher.takeScreenshotOfDefaultDevice();
                         break;
 
                     case "R":
-                        DataManager.updateAdbDeviceList();
-                        if (DataManager.getDefaultAdbDeviceIndex() != (-1)) {
-                            if (!recordingInProgress && AdbCommandDispatcher.recordingAvailable()) {
-                                AdbCommandDispatcher.startRecordingScreen(DataManager.getDefaultAdbDeviceIndex());
-                                recordingInProgress = true;
-                            } else if (recordingInProgress) {
-                                AdbCommandDispatcher.stopRecordingScreen(DataManager.getDefaultAdbDeviceIndex());
-                                recordingInProgress = false;
-                            }
-                        } else {
-                            Reporter.report("Cannot start recording, no device detected");
-                        }
+                        AdbCommandDispatcher.recordDefaultDevice();
                         break;
 
                     case "D":
-                        if (!recordingInProgress) {
-                            DataManager.cycleDefaultAdbDevice();
-                        } else {
-                            Reporter.report("Cannot change default device while recording");
-                        }
+                        AdbCommandDispatcher.cycleDefaultDevice();
                         break;
 
                 }
