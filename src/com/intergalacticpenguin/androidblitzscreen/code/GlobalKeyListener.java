@@ -1,7 +1,7 @@
+package com.intergalacticpenguin.androidblitzscreen.code;
+
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
-
-import java.io.IOException;
 
 public class GlobalKeyListener implements NativeKeyListener {
 
@@ -30,31 +30,30 @@ public class GlobalKeyListener implements NativeKeyListener {
             altPressed = false;
         }
         if (shiftPressed && altPressed) {
-            try {
-                switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
 
-                    case "A":
-                        AdbCommandDispatcher.takeScreenshotOfAllDevices();
-                        break;
+            switch (NativeKeyEvent.getKeyText(nativeKeyEvent.getKeyCode())) {
 
-                    case "P":
-                        AdbCommandDispatcher.takeScreenshotOfDefaultDevice();
-                        break;
+                case "A":
+                    AdbCommandDispatcher.takeScreenshotOfAllDevices();
+                    break;
 
-                    case "R":
-                        AdbCommandDispatcher.recordDefaultDevice();
-                        break;
+                case "P":
+                    AdbCommandDispatcher.takeScreenshotOfDefaultDevice();
+                    break;
 
-                    case "D":
-                        AdbCommandDispatcher.cycleDefaultDevice();
-                        break;
+                case "R":
+                    AdbCommandDispatcher.recordDefaultDevice();
+                    break;
 
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                case "D":
+                    AdbCommandDispatcher.cycleDefaultDevice();
+                    break;
+
             }
+
         }
     }
+
 
     @Override
     public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) {

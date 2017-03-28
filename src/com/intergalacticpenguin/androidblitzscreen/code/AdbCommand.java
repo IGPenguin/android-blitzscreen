@@ -1,3 +1,5 @@
+package com.intergalacticpenguin.androidblitzscreen.code;
+
 class AdbCommand extends ShellCommand {
 
     AdbCommand(int deviceIndex, String command, boolean waitForFinish) {

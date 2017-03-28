@@ -1,8 +1,10 @@
+package com.intergalacticpenguin.androidblitzscreen.code;
+
 import java.io.IOException;
 
 class Reporter {
 
-    static void report(String messageTitle,String messageSubtitle) {
+    static void report(String messageTitle, String messageSubtitle) {
         System.out.println(messageTitle+" "+messageSubtitle);
         if (DataManager.isThisMac()) {
             showMacNotification(messageTitle,messageSubtitle);

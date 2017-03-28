@@ -1,3 +1,5 @@
+package com.intergalacticpenguin.androidblitzscreen.code;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +39,7 @@ class DataManager {
     private static void loadAdb() {
         String path;
         if (System.getenv("ANDROID_HOME") != null) {
-            path = System.getenv("ANDROID_HOME") + "platform-tools/";
+            path = System.getenv("ANDROID_HOME") + "platform-code/";
         } else {
             throw new RuntimeException("Environment variable \"ANDROID_HOME\" not set, adb not found");
         }

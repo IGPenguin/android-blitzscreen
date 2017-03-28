@@ -1,3 +1,5 @@
+package com.intergalacticpenguin.androidblitzscreen.code;
+
 public class ShellCommandOutput {
 
     private String output;

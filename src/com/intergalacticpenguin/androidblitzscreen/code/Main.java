@@ -1,7 +1,9 @@
+package com.intergalacticpenguin.androidblitzscreen.code;
+
+import com.intergalacticpenguin.androidblitzscreen.gui.Gui;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,7 @@ public class Main {
 
         initializeGlobalKeyListener();
         registerShutdownHook();
+        new Gui();
         Reporter.report("Ready to use");
     }
 
@@ -42,12 +45,8 @@ public class Main {
     private static void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                if (globalKeyListener.recordingInProgress) {
-                    try {
-                        AdbCommandDispatcher.stopRecordingScreen(DataManager.getDefaultAdbDeviceIndex());
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                if (DataManager.isRecordingInProgress()) {
+                    AdbCommandDispatcher.recordDefaultDevice();
                 }
             }
         });
