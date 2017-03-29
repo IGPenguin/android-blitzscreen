@@ -1,5 +1,7 @@
 package com.intergalacticpenguin.androidblitzscreen.code;
 
+import com.intergalacticpenguin.androidblitzscreen.ui.window.specific.SettingsWindow;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,7 @@ public class DataManager {
     private int defaultAdbDeviceIndex;
     private boolean mac;
     private boolean recordingInProgress;
+    private SettingsWindow settingsInstance;
 
     private DataManager() {
     }
@@ -26,6 +29,7 @@ public class DataManager {
             updateAdbDeviceList();
             getInstance().defaultAdbDeviceIndex = -1;
             getInstance().recordingInProgress = false;
+            getInstance().settingsInstance = null;
             if (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x")) {
                 getInstance().mac = true;
             }
@@ -122,6 +126,14 @@ public class DataManager {
 
     static void setRecordingState(boolean recording) {
         getInstance().recordingInProgress = recording;
+    }
+
+    public static SettingsWindow getSettingsInstance() {
+        return getInstance().settingsInstance;
+    }
+
+    public static void setSettingsInstance(SettingsWindow settingsWindow) {
+        getInstance().settingsInstance = settingsWindow;
     }
 
 }
