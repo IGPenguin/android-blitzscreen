@@ -1,6 +1,6 @@
 package com.intergalacticpenguin.androidblitzscreen.code;
 
-import com.intergalacticpenguin.androidblitzscreen.gui.Gui;
+import com.intergalacticpenguin.androidblitzscreen.ui.window.specific.MainWindow;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
@@ -8,19 +8,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    private static final String VERSION = "1.1";
     private static GlobalKeyListener globalKeyListener;
 
     public static void main(String[] args) {
-        System.out.println("Android Blitzscreen " + VERSION + "\n\n" +
+        System.out.println("Android Blitzscreen " + DataManager.VERSION + "\n\n" +
                 "Shift + Alt + A - take screenshot of all connected devices\n" +
                 "Shift + Alt + P - take screenshot of default device\n" +
                 "Shift + Alt + R - start/stop recording on default device\n" +
                 "Shift + Alt + D - change default device\n");
 
-        initializeGlobalKeyListener();
+        initializeGlobalKeyListener(); //TODO allow usage without shortcuts
         registerShutdownHook();
-        new Gui();
+        new MainWindow();
         Reporter.report("Ready to use");
     }
 

@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-class DataManager {
+public class DataManager {
+    public static final String VERSION = "1.2";
     private static DataManager dataManager = null;
     private String adbLocation;
     private List<String> adbDevicesList;
@@ -39,7 +40,7 @@ class DataManager {
     private static void loadAdb() {
         String path;
         if (System.getenv("ANDROID_HOME") != null) {
-            path = System.getenv("ANDROID_HOME") + "platform-code/";
+            path = System.getenv("ANDROID_HOME") + "platform-tools/";
         } else {
             throw new RuntimeException("Environment variable \"ANDROID_HOME\" not set, adb not found");
         }
