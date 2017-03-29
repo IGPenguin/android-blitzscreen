@@ -13,7 +13,7 @@ public class MainWindow extends CustomWindow {
 
     public MainWindow() {
         super(320, 140, "Android Blitzscreen " + DataManager.VERSION, true);
-        setIconImage(new ImageIcon(getClass().getResource("ic_screenshot.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/ic_screenshot.png")).getImage());
         setLayout(new GridBagLayout());
 
         addToGrid(1, 0, new com.intergalacticpenguin.androidblitzscreen.ui.button.specific.ScreenshotButton());
