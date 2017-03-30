@@ -17,7 +17,6 @@ public class SettingsWindow extends CustomWindow {
         Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((int) screenDimensions.getWidth() / 2 + 160, (int) screenDimensions.getHeight() / 2 - 61); // Ugly but positions info right next to main window
         setLayout(new GridBagLayout());
-        setIconImage(new ImageIcon(getClass().getResource("/ic_settings.png")).getImage());
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
