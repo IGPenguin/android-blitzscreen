@@ -1,5 +1,6 @@
 package com.intergalacticpenguin.androidblitzscreen.code;
 
+import com.intergalacticpenguin.androidblitzscreen.ui.window.specific.MainWindow;
 import com.intergalacticpenguin.androidblitzscreen.ui.window.specific.SettingsWindow;
 
 import java.io.BufferedReader;
@@ -27,12 +28,9 @@ public class DataManager {
             dataManager = new DataManager();
             loadAdb();
             updateAdbDeviceList();
-            getInstance().defaultAdbDeviceIndex = -1;
             getInstance().recordingInProgress = false;
             getInstance().settingsInstance = null;
-            if (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x")) {
-                getInstance().mac = true;
-            }
+            getInstance().mac = (System.getProperty("os.name").toLowerCase().contains("mac") || System.getProperty("os.name").toLowerCase().contains("os x"));
         }
         return dataManager;
     }
@@ -84,9 +82,11 @@ public class DataManager {
         if (deviceList.isEmpty()) {
             setDefaultAdbDeviceIndex(-1);
             Reporter.report("No device connected, default device unset");
+            MainWindow.refreshDefaultDeviceText();
         } else {
             if (getDefaultAdbDeviceIndex() == (-1)) {
                 setDefaultAdbDeviceIndex(0);
+                MainWindow.refreshDefaultDeviceText();
             }
         }
     }
@@ -105,14 +105,15 @@ public class DataManager {
                 setDefaultAdbDeviceIndex(0);
             }
             Reporter.report("Device " + getAdbDeviceList().get(getDefaultAdbDeviceIndex()) + " set as default");
+            MainWindow.refreshDefaultDeviceText();
         }
     }
 
-    static int getDefaultAdbDeviceIndex() {
+    public static int getDefaultAdbDeviceIndex() {
         return getInstance().defaultAdbDeviceIndex;
     }
 
-    static String getAdbDeviceId(int deviceIndex) {
+    public static String getAdbDeviceId(int deviceIndex) {
         return getAdbDeviceList().get(deviceIndex);
     }
 
