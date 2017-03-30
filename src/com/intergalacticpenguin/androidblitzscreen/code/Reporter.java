@@ -2,16 +2,16 @@ package com.intergalacticpenguin.androidblitzscreen.code;
 
 import java.io.IOException;
 
-class Reporter {
+public class Reporter {
 
-    static void report(String messageTitle, String messageSubtitle) {
+    public static void report(String messageTitle, String messageSubtitle) {
         System.out.println(messageTitle+" "+messageSubtitle);
         if (DataManager.isThisMac()) {
             showMacNotification(messageTitle,messageSubtitle);
         }
     }
 
-    static void report(String message) {
+    public static void report(String message) {
         System.out.println(message);
         if (DataManager.isThisMac()) {
             showMacNotification(message);
