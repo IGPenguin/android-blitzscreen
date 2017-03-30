@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    private static GlobalKeyListener globalKeyListener;
 
     public static void main(String[] args) {
         System.out.println("Android Blitzscreen " + DataManager.VERSION + "\n\n" +
@@ -17,28 +16,10 @@ public class Main {
                 "Shift + Alt + R - start/stop recording on default device\n" +
                 "Shift + Alt + D - change default device\n");
 
-        initializeGlobalKeyListener(); //TODO allow usage without shortcuts
-        registerShutdownHook();
         new MainWindow();
+        registerNativeKeyListener(); // TODO make it work with swing - https://github.com/kwhat/jnativehook/wiki/Swing
+        registerShutdownHook();
         Reporter.report("Ready to use");
-    }
-
-
-    private static void initializeGlobalKeyListener() {
-        // Disable logging for key listening
-        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-        logger.setLevel(Level.OFF);
-        logger.setUseParentHandlers(false);
-
-        try {
-            GlobalScreen.registerNativeHook();
-        } catch (NativeHookException ex) {
-            Reporter.report("Native hook cant be registered, accessibility settings on your computer probably not set");
-            System.exit(1);
-        }
-
-        globalKeyListener = new GlobalKeyListener();
-        GlobalScreen.addNativeKeyListener(globalKeyListener);
     }
 
     private static void registerShutdownHook() {
@@ -49,5 +30,18 @@ public class Main {
                 }
             }
         });
+    }
+
+    private static void registerNativeKeyListener() {
+        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        logger.setLevel(Level.OFF);
+        logger.setUseParentHandlers(false);
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException ex) {
+            Reporter.report("Native hook cant be registered, accessibility settings on your computer probably not set");
+            ex.printStackTrace();
+        }
+        GlobalScreen.addNativeKeyListener(new GlobalKeyListener());
     }
 }
