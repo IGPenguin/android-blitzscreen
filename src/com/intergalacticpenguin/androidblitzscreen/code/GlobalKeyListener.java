@@ -3,7 +3,7 @@ package com.intergalacticpenguin.androidblitzscreen.code;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-public class GlobalKeyListener implements NativeKeyListener {
+class GlobalKeyListener implements NativeKeyListener {
 
     private boolean shiftPressed = false;
     private boolean altPressed = false;
