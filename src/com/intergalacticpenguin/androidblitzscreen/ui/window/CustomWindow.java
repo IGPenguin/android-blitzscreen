@@ -31,15 +31,20 @@ public class CustomWindow extends JFrame {
         }
     }
 
-    public void addToGrid(int gridx, int gridy, JComponent component) {
+    public void addToGrid(int gridx, int gridy, int gridWidth, JComponent component) {
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridwidth = gridWidth;
         constraints.gridx = gridx;
         constraints.gridy = gridy;
 
         getContentPane().add(component, constraints);
         setVisible(true);
+    }
+
+    public void addToGrid(int gridx, int gridy, JComponent component) {
+        addToGrid(gridx, gridy, 1, component);
     }
 
 }
